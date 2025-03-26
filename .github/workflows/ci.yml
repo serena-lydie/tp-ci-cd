@@ -19,8 +19,7 @@ jobs:
       - name: Exécuter les tests
         run: python -m unittest test_app.py
 
-
-security:
+  security:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +28,7 @@ security:
           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
           unzip sonar-scanner.zip
           echo "$PWD/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
- 
+
       - name: Analyse du code avec SonarQube
         run: |
           sonar-scanner \
@@ -40,6 +39,7 @@ security:
           -Dsonar.token=${{secrets.SONAR_TOKEN}}
 
       - uses: actions/checkout@master
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
         env:
@@ -51,5 +51,4 @@ security:
     steps: 
       - name: Déclencher le déploiement sur Render 
         run: | 
-          curl -X POST "https://api.render.com/deploy/srv-cvhurhqn91rc73aj30vg?key=TCZdL0k0oVc" 
-         
+          curl -X POST "https://api.render.com/deploy/srv-cvhurhqn91rc73aj30vg?key=TCZdL0k0oVc"
