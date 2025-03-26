@@ -20,6 +20,27 @@ jobs:
         run: python -m unittest test_app.py
 
 
+security:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installer SonarScanner
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip
+          echo "$PWD/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+ 
+      - name: Analyse du code avec SonarQube
+        run: |
+          sonar-scanner \
+          -Dsonar.organization=serena-lydie \
+          -Dsonar.projectKey=serena-lydie_tp-ci-cd \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.token=${{secrets.SONAR_TOKEN}}
+
+
+
   deploy: 
     needs: test 
     runs-on: ubuntu-latest 
